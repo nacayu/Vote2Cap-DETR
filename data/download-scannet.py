@@ -5,7 +5,7 @@
 import argparse
 import os
 # import urllib.request (for python3)
-import urllib
+import urllib.request
 import tempfile
 
 BASE_URL = 'http://kaldir.vc.in.tum.de/scannet/'
@@ -27,8 +27,8 @@ V1_IDX = 1
 
 
 def get_release_scans(release_file):
-    #scan_lines = urllib.request.urlopen(release_file)
-    scan_lines = urllib.urlopen(release_file)
+    scan_lines = urllib.request.urlopen(release_file)
+    # scan_lines = urllib.urlopen(release_file)
     scans = []
     for scan_line in scan_lines:
         scan_id = scan_line.decode('utf8').rstrip('\n')
@@ -55,8 +55,8 @@ def download_file(url, out_file):
         fh, out_file_tmp = tempfile.mkstemp(dir=out_dir)
         f = os.fdopen(fh, 'w')
         f.close()
-        #urllib.request.urlretrieve(url, out_file_tmp)
-        urllib.urlretrieve(url, out_file_tmp)
+        urllib.request.urlretrieve(url, out_file_tmp)
+        # urllib.urlretrieve(url, out_file_tmp)
         os.rename(out_file_tmp, out_file)
     else:
         print('WARNING: skipping download of existing file ' + out_file)
@@ -114,12 +114,12 @@ def main():
     parser.add_argument('--test_frames_2d', action='store_true', help='download 2D test frames (' + TEST_FRAMES_FILE[1] + '; also included with whole dataset download)')
     parser.add_argument('--type', help='specific file type to download (.aggregation.json, .sens, .txt, _vh_clean.ply, _vh_clean_2.0.010000.segs.json, _vh_clean_2.ply, _vh_clean.segs.json, _vh_clean.aggregation.json, _vh_clean_2.labels.ply, _2d-instance.zip, _2d-instance-filt.zip, _2d-label.zip, _2d-label-filt.zip)')
     args = parser.parse_args()
+    key = input('')
 
     print('By pressing any key to continue you confirm that you have agreed to the ScanNet terms of use as described at:')
     print(TOS_URL)
     print('***')
     print('Press any key to continue, or CTRL-C to exit.')
-    key = raw_input('')
 
     if args.v1:
         global RELEASE
@@ -133,10 +133,10 @@ def main():
 
     release_file = BASE_URL + RELEASE + '.txt'
     release_scans = get_release_scans(release_file)
-    file_types = FILETYPES;
+    file_types = FILETYPES
     release_test_file = BASE_URL + RELEASE + '_test.txt'
     release_test_scans = get_release_scans(release_test_file)
-    file_types_test = FILETYPES_TEST;
+    file_types_test = FILETYPES_TEST
     out_dir_scans = os.path.join(args.out_dir, 'scans')
     out_dir_test_scans = os.path.join(args.out_dir, 'scans_test')
     out_dir_tasks = os.path.join(args.out_dir, 'tasks')
@@ -176,7 +176,7 @@ def main():
             use_v1_sens = not is_test_scan
             if not is_test_scan and not args.v1 and '.sens' in scan_file_types:
                 print('Note: ScanNet v2 uses the same .sens files as ScanNet v1: Press \'n\' to exclude downloading .sens files for each scan')
-                key = raw_input('')
+                key = input('')
                 if key.strip().lower() == 'n':
                     scan_file_types.remove('.sens')
             download_scan(scan_id, out_dir, scan_file_types, use_v1_sens)
@@ -188,10 +188,10 @@ def main():
         print('Note that existing scan directories will be skipped. Delete partially downloaded directories to re-download.')
         print('***')
         print('Press any key to continue, or CTRL-C to exit.')
-        key = raw_input('')
+        key = input('')
         if not args.v1 and '.sens' in file_types:
             print('Note: ScanNet v2 uses the same .sens files as ScanNet v1: Press \'n\' to exclude downloading .sens files for each scan')
-            key = raw_input('')
+            key = input('')
             if key.strip().lower() == 'n':
                 file_types.remove('.sens')
         download_release(release_scans, out_dir_scans, file_types, use_v1_sens=True)

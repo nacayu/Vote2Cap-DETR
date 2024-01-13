@@ -13,7 +13,7 @@ import numpy as np
 from load_scannet_data import export
 import pdb
 
-SCANNET_DIR = '.../scans'   # TODO: change this
+SCANNET_DIR = '../data/scannet/scans'   # TODO: change this
 # SCANNET_DIR = '.../scans_test'   # HACK: If you wish to upload your results, remember to process the test set
 SCAN_NAMES = os.listdir(SCANNET_DIR)
 LABEL_MAP_FILE = 'meta_data/scannetv2-labels.combined.tsv'
